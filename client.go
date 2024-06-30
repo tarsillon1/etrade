@@ -5,7 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/dghubble/oauth1"
@@ -45,6 +47,11 @@ func do[Output any](ctx context.Context, httpClientSource httpClientSource, meth
 		return target, err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode != 200 {
+		body, _ := ioutil.ReadAll(res.Body)
+		return target, fmt.Errorf("request failed with status code %d: %s", res.StatusCode, string(body))
+	}
 
 	err = json.NewDecoder(res.Body).Decode(target)
 	if err != nil {
