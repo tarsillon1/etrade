@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/dghubble/oauth1"
+	"github.com/tarsillon1/oauth1"
 )
 
 type httpClientSource = func(ctx context.Context) (*http.Client, error)

@@ -1,7 +1,7 @@
 package etrade
 
 import (
-	"github.com/dghubble/oauth1"
+	"github.com/tarsillon1/oauth1"
 )
 
 const (
@@ -22,5 +22,6 @@ func NewOAuth1Config(consumerKey, consumerSecret, callbackUrl string) oauth1.Con
 			RequestTokenURL: requestTokenUrl,
 			AuthorizeURL:    authorizeUrl,
 		},
+		HTTPMethod: "GET",
 	}
 }
