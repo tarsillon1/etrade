@@ -59,13 +59,13 @@ const (
 	SandboxAPIUrl    = "https://apisb.etrade.com"
 )
 
-type client struct {
+type Client struct {
 	*Config
 	Account *accountClient
 	Order   *orderClient
 }
 
-func (c *client) getHttpClient(ctx context.Context) (*http.Client, error) {
+func (c *Client) getHttpClient(ctx context.Context) (*http.Client, error) {
 	token, err := c.Oauth1TokenSource.Token()
 	if err != nil {
 		return nil, err
@@ -84,8 +84,8 @@ type Config struct {
 }
 
 // New creates an etrade client.
-func New(config *Config) *client {
-	client := &client{
+func New(config *Config) *Client {
+	client := &Client{
 		Config: config,
 	}
 	client.Account = &accountClient{apiUrl: config.APIUrl, httpClientSource: client.getHttpClient}
