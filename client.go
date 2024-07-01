@@ -57,7 +57,7 @@ func do[Output any](ctx context.Context, httpClientSource httpClientSource, meth
 	var nested map[string]Output
 	err = json.Unmarshal(b, &nested)
 	if err != nil {
-		return empty, fmt.Errorf("failed to parse response body: %s", string(b))
+		return empty, fmt.Errorf("failed to parse response body: %e \n %s", err, string(b))
 	}
 
 	return nested[nestedField], err
