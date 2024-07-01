@@ -41,6 +41,7 @@ func do[Output any](ctx context.Context, httpClientSource httpClientSource, meth
 	if body != nil {
 		req.Header.Add("Content-Type", "application/json")
 	}
+	req.Header.Add("Accept", "application/json")
 
 	res, err := client.Do(req)
 	if err != nil {
