@@ -29,7 +29,6 @@ func do[Output any](ctx context.Context, httpClientSource httpClientSource, meth
 			return target, err
 		}
 		body = bytes.NewReader(b)
-
 	}
 
 	req, err := http.NewRequest(method, url, body)
@@ -49,14 +48,14 @@ func do[Output any](ctx context.Context, httpClientSource httpClientSource, meth
 	}
 	defer res.Body.Close()
 
+	b, _ := ioutil.ReadAll(res.Body)
 	if res.StatusCode != 200 {
-		body, _ := ioutil.ReadAll(res.Body)
-		return target, fmt.Errorf("request failed with status code %d: %s", res.StatusCode, string(body))
+		return target, fmt.Errorf("request failed with status code %d: %s", res.StatusCode, string(b))
 	}
 
-	err = json.NewDecoder(res.Body).Decode(target)
+	err = json.Unmarshal(b, &target)
 	if err != nil {
-		return target, err
+		return target, fmt.Errorf("failed to parse response body: %s", string(b))
 	}
 
 	return target, err
