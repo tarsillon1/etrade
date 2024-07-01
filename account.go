@@ -23,7 +23,9 @@ type Account struct {
 
 // https://apisb.etrade.com/docs/api/account/api-account-v1.html#/definitions/AccountListResponse
 type AccountListResponse struct {
-	Accounts []Account `json:"accounts"`
+	Accounts struct {
+		Account []Account
+	} `json:"Accounts"`
 }
 
 type AccountBalanceRequest struct {
