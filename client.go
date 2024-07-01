@@ -15,25 +15,25 @@ import (
 
 type httpClientSource = func(ctx context.Context) (*http.Client, error)
 
-func do[Output any](ctx context.Context, httpClientSource httpClientSource, method string, url string, input any) (Output, error) {
-	var target Output
+func do[Output any](ctx context.Context, httpClientSource httpClientSource, method string, url, nestedField string, input any) (Output, error) {
+	var empty Output
 	client, err := httpClientSource(ctx)
 	if err != nil {
-		return target, err
+		return empty, err
 	}
 
 	var body io.Reader
 	if input != nil {
 		b, err := json.Marshal(input)
 		if err != nil {
-			return target, err
+			return empty, err
 		}
 		body = bytes.NewReader(b)
 	}
 
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		return target, err
+		return empty, err
 	}
 	req = req.WithContext(ctx)
 
@@ -44,21 +44,22 @@ func do[Output any](ctx context.Context, httpClientSource httpClientSource, meth
 
 	res, err := client.Do(req)
 	if err != nil {
-		return target, err
+		return empty, err
 	}
 	defer res.Body.Close()
 
 	b, _ := ioutil.ReadAll(res.Body)
 	if res.StatusCode != 200 {
-		return target, fmt.Errorf("request failed with status code %d: %s", res.StatusCode, string(b))
+		return empty, fmt.Errorf("request failed with status code %d: %s", res.StatusCode, string(b))
 	}
 
-	err = json.Unmarshal(b, &target)
+	nested := map[string]Output{}
+	err = json.Unmarshal(b, &nested)
 	if err != nil {
-		return target, fmt.Errorf("failed to parse response body: %s", string(b))
+		return empty, fmt.Errorf("failed to parse response body: %s", string(b))
 	}
 
-	return target, err
+	return nested[nestedField], err
 }
 
 const (

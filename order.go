@@ -395,15 +395,15 @@ type PreviewOrderResponse struct {
 
 // Place is used to submit an order after it has been successfully previewed.
 func (o *orderClient) Place(ctx context.Context, input PlaceOrderRequest) (PlaceOrderResponse, error) {
-	return do[PlaceOrderResponse](ctx, o.httpClientSource, "POST", o.apiUrl+fmt.Sprintf(orderPlacePath, input.AccountIdKey), input)
+	return do[PlaceOrderResponse](ctx, o.httpClientSource, "POST", o.apiUrl+fmt.Sprintf(orderPlacePath, input.AccountIdKey), "PlaceOrderResponse", input)
 }
 
 // Preview is used to submit an order request for preview before placing it.
 func (o *orderClient) Preview(ctx context.Context, input PreviewOrderRequest) (PreviewOrderResponse, error) {
-	return do[PreviewOrderResponse](ctx, o.httpClientSource, "POST", o.apiUrl+fmt.Sprintf(orderPreviewPath, input.AccountIdKey), input)
+	return do[PreviewOrderResponse](ctx, o.httpClientSource, "POST", o.apiUrl+fmt.Sprintf(orderPreviewPath, input.AccountIdKey), "PreviewOrderResponse", input)
 }
 
 // https://apisb.etrade.com/docs/api/order/api-order-v1.html#/definition/getOrders
 func (o *orderClient) List(ctx context.Context, input OrdersRequest) (OrdersResponse, error) {
-	return do[OrdersResponse](ctx, o.httpClientSource, "GET", o.apiUrl+fmt.Sprintf(orderListPath, input.AccountIdKey, input.Marker), nil)
+	return do[OrdersResponse](ctx, o.httpClientSource, "GET", o.apiUrl+fmt.Sprintf(orderListPath, input.AccountIdKey, input.Marker), "OrdersResponse", nil)
 }

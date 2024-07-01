@@ -60,10 +60,10 @@ type BalanceResponse struct {
 
 // https://apisb.etrade.com/docs/api/account/api-account-v1.html
 func (a *accountClient) List(ctx context.Context) (AccountListResponse, error) {
-	return do[AccountListResponse](ctx, a.httpClientSource, "GET", a.apiUrl+listAccountsPath, nil)
+	return do[AccountListResponse](ctx, a.httpClientSource, "GET", a.apiUrl+listAccountsPath, "AccountListResponse", nil)
 }
 
 // https://apisb.etrade.com/docs/api/account/api-balance-v1.html
 func (a *accountClient) Balance(ctx context.Context, input AccountBalanceRequest) (BalanceResponse, error) {
-	return do[BalanceResponse](ctx, a.httpClientSource, "GET", a.apiUrl+fmt.Sprintf(balanceAccountPath, input.AccountIdKey), nil)
+	return do[BalanceResponse](ctx, a.httpClientSource, "GET", a.apiUrl+fmt.Sprintf(balanceAccountPath, input.AccountIdKey), "BalanceResponse", nil)
 }
