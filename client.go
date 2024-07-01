@@ -3,6 +3,7 @@ package etrade
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -53,7 +54,7 @@ func do[Output any](ctx context.Context, httpClientSource httpClientSource, meth
 		return empty, fmt.Errorf("request failed with status code %d: %s", res.StatusCode, string(b))
 	}
 
-	nested := map[string]Output{}
+	var nested map[string]Output
 	err = json.Unmarshal(b, &nested)
 	if err != nil {
 		return empty, fmt.Errorf("failed to parse response body: %s", string(b))
@@ -81,7 +82,13 @@ func (c *Client) getHttpClient(ctx context.Context) (*http.Client, error) {
 	if token == nil {
 		return nil, errors.New("missing access token")
 	}
-	return c.OAuth1Config.Client(ctx, token), nil
+	client := c.OAuth1Config.Client(ctx, token)
+	client.Transport = &http.Transport{
+		TLSClientConfig: &tls.Config{
+			MaxVersion: tls.VersionTLS12,
+		},
+	}
+	return client, nil
 }
 
 // Config for etrade client.
