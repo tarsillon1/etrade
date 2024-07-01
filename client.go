@@ -3,7 +3,6 @@ package etrade
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -83,11 +82,6 @@ func (c *Client) getHttpClient(ctx context.Context) (*http.Client, error) {
 		return nil, errors.New("missing access token")
 	}
 	client := c.OAuth1Config.Client(ctx, token)
-	client.Transport = &http.Transport{
-		TLSClientConfig: &tls.Config{
-			MaxVersion: tls.VersionTLS12,
-		},
-	}
 	return client, nil
 }
 
