@@ -14,11 +14,11 @@ const (
 )
 
 // NewOAuth1Config creates an OAuth configuration with pre-configured endpoints for ETrade OAuth provider.
-func NewOAuth1Config(consumerKey, consumerSecret, callbackUrl string) oauth1.Config {
+func NewOAuth1Config(consumerKey, consumerSecret string) oauth1.Config {
 	return oauth1.Config{
 		ConsumerKey:    consumerKey,
 		ConsumerSecret: consumerSecret,
-		CallbackURL:    callbackUrl,
+		CallbackURL:    "oob",
 		Endpoint: oauth1.Endpoint{
 			AccessTokenURL:  accessTokenUrl,
 			RequestTokenURL: requestTokenUrl,
