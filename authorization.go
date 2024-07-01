@@ -8,7 +8,7 @@ import (
 
 const (
 	apiUrl          = "https://api.etrade.com"
-	authorizeUrl    = "https://us.etrade.com/e/t/etws/authorize?oauth_consumer_key=%s"
+	authorizeUrl    = "https://us.etrade.com/e/t/etws/authorize?key=%s"
 	accessTokenUrl  = apiUrl + "/oauth/access_token"
 	requestTokenUrl = apiUrl + "/oauth/request_token"
 )
@@ -24,6 +24,7 @@ func NewOAuth1Config(consumerKey, consumerSecret string) oauth1.Config {
 			RequestTokenURL: requestTokenUrl,
 			AuthorizeURL:    fmt.Sprintf(authorizeUrl, consumerKey),
 		},
-		HTTPMethod: "GET",
+		HTTPMethod:                   "GET",
+		AuthorizationOAuthTokenParam: "token",
 	}
 }
